@@ -1,15 +1,50 @@
 
-export async function render_data(company_data) {
-    const resultDiv = document.getElementById("result");
+export async function render_data(company, input_word) {
 
-    if (company_data) {
-    
+    // 完全一致
+    if (company.type == "exact") {
+        const resultDiv = document.getElementById("result");
         resultDiv.innerHTML = `
-        <p>証券コード: ${company_data["証券コード"]}</p>
-        <p>企業名: ${company_data["企業名"]}</p>
-        <p>業種: ${company_data["業種"]}</p>
+            <p>証券コード: ${company.data["証券コード"]}</p>
+            <p>企業名: ${company.data["企業名"]}</p>
+            <p>業種: ${company.data["業種"]}</p>
+            `;
+    }
+    // 部分一致 
+    else {
+        const listDiv = document.getElementById("candidates");
+        listDiv.innerHTML = `<p>「${input_word}」に一致する候補:</p><ul></ul>`;
+        const ul = document.querySelector("ul");
+        company.data.forEach(c => {
+            const li = document.createElement("li");
+            li.textContent = `証券コード: ${c["証券コード"]} - ${c["企業名"]} (${c["業種"]}) `;
+            
+            const btn = document.createElement("button");
+            btn.textContent = "確認";
+            btn.addEventListener("click", () => display(c));
+
+            li.appendChild(btn);
+            ul.appendChild(li);
+        });
+    }
+
+}
+
+
+
+
+async function display(company) {
+    const listDiv = document.getElementById("candidates");
+    listDiv.innerHTML = ""; // 候補リストを削除
+
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = `
+        <p>証券コード: ${company["証券コード"]}</p>
+        <p>企業名: ${company["企業名"]}</p>
+        <p>業種: ${company["業種"]}</p>
         `;
 
-    }
-    
+    // URLの?code=を証券コードに置き換える
+    const newUrl = `${window.location.pathname}?code=${company["証券コード"]}`;
+    window.history.pushState({companyCode: company["証券コード"]}, "", newUrl);
 }

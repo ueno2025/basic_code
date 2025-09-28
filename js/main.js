@@ -8,9 +8,14 @@ async function main() {
     
     if (code) {
         const company_data = await fetch_json(code);
-        render_data(company_data);
+        render_data(company_data, code);
+    }
+    else {
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = "<p>証券コード、もしくは企業名を入力してください。"
     }
     
 }
 
 main();
+
