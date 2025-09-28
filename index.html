@@ -9,11 +9,12 @@
     <h1>企業検索基本構造</h1>
 
     <form method="GET">
-        <label for="code_input">証券コードを入力:</label>
-        <input type="text" id="code_input" name="code" placeholder="例:1301">
+        <label for="code_input">証券コードか企業名を入力:</label>
+        <input type="text" id="code_input" name="code" placeholder="例:1301,極洋">
         <button type="submit">検索</button>
     </form>
 
+    <div id="candidates"></div>
     <div id="result"></div>
 
     <script type="module" src="./js/main.js"></script>
